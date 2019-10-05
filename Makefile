@@ -51,8 +51,9 @@ run_rom: rom
 web: $(WEB_BUILD_DIR)/game.html
 	mv $(WEB_BUILD_DIR)/game.html $(WEB_BUILD_DIR)/index.html
 
-web_deploy: web
+web_deploy: web rom
 	cp -r $(WEB_BUILD_DIR)/* ./docs/
+	cp $(ROM_BUILD_DIR)/game.gb ./docs/
 
 assets: FORCE
 	cd assets && ./build.sh
