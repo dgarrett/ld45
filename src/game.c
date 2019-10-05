@@ -256,6 +256,17 @@ void game_loop()
                 player_vy.w = JUMP_VELOCITY;
                 player_vy_dir = -1;
                 hold_jump = FALSE;
+
+                // pew pew sound
+                // NR52_REG = 0x80;
+                // NR51_REG = 0x11;
+                // NR50_REG = 0x77;
+
+NR10_REG = 0x15;
+NR11_REG = 0x96;
+NR12_REG = 0x73;
+NR13_REG = 0xBB;
+NR14_REG = 0x85;
             }
         }
 
