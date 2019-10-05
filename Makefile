@@ -45,6 +45,9 @@ clean:
 
 rom: assets $(ROM_BUILD_DIR)/game.gb
 
+run_rom: rom
+	open build/gb/game.gb
+
 web: $(WEB_BUILD_DIR)/game.html
 	mv $(WEB_BUILD_DIR)/game.html $(WEB_BUILD_DIR)/index.html
 

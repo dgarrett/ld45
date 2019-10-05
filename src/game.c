@@ -3,6 +3,7 @@
 
 void game_loop();
 void win();
+void reset_level();
 
 UBYTE prev_joy;
 UBYTE time;
@@ -259,8 +260,11 @@ void game_loop()
         // Check for end state
         if(col_tile == 0xa && below_tile >= 0xb && player_vy.w == 0 ) {
             win();
+            // reset_level();
         }
 
+    } else if (i & J_START) {
+        reset_level();
     }
 
     prev_joy = i;
@@ -276,4 +280,22 @@ void win() {
     SCX_REG = 0;
     SCY_REG = 0;
     DISPLAY_ON;    
+}
+
+void reset_level() {
+    WX_REG = MAXWNDPOSX;
+    WY_REG = MAXWNDPOSY;
+
+    // Initialize the background
+    set_bkg_data(0x00, 108, platformer_tileset);
+    set_bkg_tiles(0, 0, 32, 32, platformer_tiles);
+    set_sprite_data(0x00, 0x80, player_sprites);
+
+    DISPLAY_ON;
+    SHOW_SPRITES;
+
+    player_x.b.h = 48;
+    player_y.b.h = 224;
+
+    running = TRUE;
 }
