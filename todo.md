@@ -1,7 +1,7 @@
 # Ludum Dare 45
 
 ## Tasks
-- [ ] First dot character hops, but can't jump
+- [x] First dot character hops, but can't jump
 - [ ] Enemy sprites
 - [ ] Powerup/body part sprites
 - [ ] Door to new level
