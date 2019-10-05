@@ -1,5 +1,5 @@
 # deploy or debug/build
-JS_ENV = debug/build
+JS_ENV = deploy
 # SHELL_FILE = node_modules/gbdkjs/shell_debug/build/index.html
 SHELL_FILE = node_modules/gbdkjs/shell_$(JS_ENV)/index.html
 EMCC = emcc -O2 -Wno-implicit-function-declaration -Inode_modules/gbdkjs/include -Inode_modules/gbdkjs/gbdk/include -Iinclude --js-library node_modules/gbdkjs/emscripten_bindings.js
