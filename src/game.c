@@ -39,13 +39,17 @@ void draw_player()
         if(player_vx_dir >= 0) {
             set_sprite_prop(0, 0);
             set_sprite_prop(1, 0);
-            set_sprite_tile(0, 4 + (((time>>2)&2)<<1));
-            set_sprite_tile(1, 6 + (((time>>2)&2)<<1));  
+            set_sprite_tile(0, 0);
+            set_sprite_tile(1, 2);
+            // set_sprite_tile(0, 4 + (((time>>2)&2)<<1));
+            // set_sprite_tile(1, 6 + (((time>>2)&2)<<1));
         } else {
             set_sprite_prop(0, S_FLIPX);
             set_sprite_prop(1, S_FLIPX);
-            set_sprite_tile(0, 6 + (((time>>2)&2)<<1));  
-            set_sprite_tile(1, 4 + (((time>>2)&2)<<1));
+            set_sprite_tile(0, 2);
+            set_sprite_tile(1, 0);
+            // set_sprite_tile(0, 6 + (((time>>2)&2)<<1));
+            // set_sprite_tile(1, 4 + (((time>>2)&2)<<1));
         }         
     }
 }
