@@ -16,6 +16,9 @@ BYTE player_vy_dir;
 UBYTE running;
 UBYTE hold_jump;
 
+struct player_character pc = {DOT};
+int debug_num = 0;
+
 #define MIN_WALK_VEL 0x130
 #define WALK_ACCELERATION 0x098
 #define RUN_ACCELERATION 0xE4
@@ -240,11 +243,20 @@ void game_loop()
             // LOG("HIT TILE %d\n", below_tile);
             player_y.b.h = t_y<<3;
             player_vy.w = 0; 
-            if(!hold_jump && (i & J_A)) {
+            if(!hold_jump && (i & J_A) && pc.body >= LEGS) {
                 player_vy.w = JUMP_VELOCITY;
                 player_vy_dir = -1;
                 hold_jump = TRUE;
             }                     
+            if (((i & J_RIGHT) || (i & J_LEFT)) && pc.body == DOT) {
+                if (i & J_LEFT) {
+                    // TODO: For some reason this makes DOT hopping to the left work
+                    debug_num = 2;
+                }
+                player_vy.w = JUMP_VELOCITY;
+                player_vy_dir = -1;
+                hold_jump = FALSE;
+            }
         }
 
         // Handle Jump Release

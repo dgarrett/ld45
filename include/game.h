@@ -7,4 +7,15 @@
 #include <stdarg.h>
 #include <string.h>
 
+enum PLAYER_BODY {
+	DOT,
+	LEGS,
+	TORSO,
+	HEAD
+};
+
+struct player_character {
+	enum PLAYER_BODY body;
+};
+
 #endif
