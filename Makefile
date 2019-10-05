@@ -10,7 +10,7 @@ OBJDIR = obj
 
 all:	game.html
 
-$(OBJDIR)/%.o:	src/%.c
+$(OBJDIR)/%.o:	src/%.c include/assets.h
 	$(CC) -c -o $@ $<
 
 $(OBJDIR)/%.o:	src/data/%.c
@@ -41,7 +41,12 @@ clean:
 	rm -f obj/*
 	rm -rf build
 
-rom: $(ROM_BUILD_DIR)/game.gb
+rom: assets $(ROM_BUILD_DIR)/game.gb
 
 web: $(WEB_BUILD_DIR)/game.html
 	mv $(WEB_BUILD_DIR)/game.html $(WEB_BUILD_DIR)/index.html
+
+assets: FORCE
+	cd assets && ./build.sh
+
+FORCE:

@@ -3,7 +3,7 @@
 ASSET_FILE=../include/assets.h
 
 # Build tilesets
-ggbgfx tileset platformer.png -o platformer_tileset.png
+#ggbgfx tileset platformer.png -o platformer_tileset.png
 ggbgfx tileset win.png -o win_tileset.png
 
 # Build sprites
