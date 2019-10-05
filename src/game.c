@@ -32,6 +32,18 @@ int debug_num = 0;
 #define GRAVITY 0x700
 #define MAX_FALL_SPEED 0x4800
 
+void play_fx_dot_hop() {
+    NR52_REG = 0x80;
+    NR51_REG = 0x11;
+    NR50_REG = 0x77;
+
+    NR10_REG = 0x15;
+    NR11_REG = 0x96;
+    NR12_REG = 0x73;
+    NR13_REG = 0xBB;
+    NR14_REG = 0x85;
+}
+
 void draw_player()
 {
     if(player_vx.w == 0) {
@@ -257,16 +269,7 @@ void game_loop()
                 player_vy_dir = -1;
                 hold_jump = FALSE;
 
-                // pew pew sound
-                // NR52_REG = 0x80;
-                // NR51_REG = 0x11;
-                // NR50_REG = 0x77;
-
-NR10_REG = 0x15;
-NR11_REG = 0x96;
-NR12_REG = 0x73;
-NR13_REG = 0xBB;
-NR14_REG = 0x85;
+                play_fx_dot_hop();
             }
         }
 
