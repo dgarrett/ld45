@@ -1,5 +1,7 @@
+# deploy or debug
+JS_ENV = deploy
 # SHELL_FILE = node_modules/gbdkjs/shell_debug/build/index.html
-SHELL_FILE = node_modules/gbdkjs/shell_deploy/index.html
+SHELL_FILE = node_modules/gbdkjs/shell_$(JS_ENV)/index.html
 EMCC = emcc -O2 -Wno-implicit-function-declaration -Inode_modules/gbdkjs/include -Inode_modules/gbdkjs/gbdk/include -Iinclude --js-library node_modules/gbdkjs/emscripten_bindings.js
 CC = lcc -Wa-l -Wl-m -Wl-j -Wl-yt1 -Iinclude -Igenerated -Inode_modules/gbdkjs/include
 
@@ -34,7 +36,7 @@ $(ROM_BUILD_DIR)/%.gb:	$(OBJDIR)/%.o
 
 $(WEB_BUILD_DIR)/%.html:	$(OBJDIR)/%.bc
 	mkdir -p $(WEB_BUILD_DIR)
-	cp -r node_modules/gbdkjs/shell_debug/build/static $(WEB_BUILD_DIR)
+	cp -r node_modules/gbdkjs/shell_$(JS_ENV)/static $(WEB_BUILD_DIR)
 	$(EMCC) --shell-file $(SHELL_FILE) -s ASSERTIONS=1 -o $@ $^
 
 clean:
@@ -45,6 +47,9 @@ rom: assets $(ROM_BUILD_DIR)/game.gb
 
 web: $(WEB_BUILD_DIR)/game.html
 	mv $(WEB_BUILD_DIR)/game.html $(WEB_BUILD_DIR)/index.html
+
+web_deploy: web
+	cp -r $(WEB_BUILD_DIR)/* ./docs/
 
 assets: FORCE
 	cd assets && ./build.sh
