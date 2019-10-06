@@ -17,6 +17,7 @@ enum PLAYER_BODY {
 struct player_character {
 	enum PLAYER_BODY body;
 	unsigned char *sprite_sheet;
+	int draw_direction;
 };
 
 #endif

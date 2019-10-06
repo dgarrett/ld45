@@ -17,7 +17,7 @@ UBYTE running;
 UBYTE hold_jump;
 int peck_frames = 0;
 
-struct player_character pc = {DOT, dot_sprites};
+struct player_character pc = {DOT, dot_sprites, 1};
 int debug_num = 0;
 
 #define MIN_WALK_VEL 0x130
@@ -47,55 +47,81 @@ void play_fx_dot_hop() {
 
 void draw_player()
 {
-    if(player_vx.w == 0) {
-        set_sprite_prop(0, 0);
-        set_sprite_prop(1, 0);
-        set_sprite_tile(0, 0);
-        set_sprite_tile(1, 2);
-    } else {
+    if (player_vx_dir > 0)
+    {
+        pc.draw_direction = 1;
+    }
+    else if (player_vx_dir < 0)
+    {
+        pc.draw_direction = -1;
+    }
+
+    if (player_vx.w == 0)
+    {
+        if (pc.draw_direction > 0)
+        {
+            set_sprite_prop(0, 0);
+            set_sprite_prop(1, 0);
+            set_sprite_tile(0, 0);
+            set_sprite_tile(1, 2);
+        } else if (pc.draw_direction < 0)
+        {
+            set_sprite_prop(0, S_FLIPX);
+            set_sprite_prop(1, S_FLIPX);
+            set_sprite_tile(0, 2);
+            set_sprite_tile(1, 0);
+        }
+    }
+    else
+    {
         int flying_add = 0;
-    UBYTE t_x, t_y, below_tile;
+        UBYTE t_x, t_y, below_tile;
         // Collision
-        t_x = player_x.b.h>>3;
-        t_y = player_y.b.h>>3;
+        t_x = player_x.b.h >> 3;
+        t_y = player_y.b.h >> 3;
 
         below_tile = platformer_tiles[(32 * t_y) + t_x];
-        if (!(below_tile >= 0xb)) {
+        if (!(below_tile >= 0xb))
+        {
             flying_add = 8;
         }
-        if(player_vx_dir >= 0) {
+        if (pc.draw_direction >= 0)
+        {
             set_sprite_prop(0, 0);
             set_sprite_prop(1, 0);
             // set_sprite_tile(0, 0);
             // set_sprite_tile(1, 2);
-            set_sprite_tile(0, 8 + (((time>>2)&2)<<1) + flying_add);
-            set_sprite_tile(1, 10 + (((time>>2)&2)<<1) + flying_add);
-        } else {
+            set_sprite_tile(0, 8 + (((time >> 2) & 2) << 1) + flying_add);
+            set_sprite_tile(1, 10 + (((time >> 2) & 2) << 1) + flying_add);
+        }
+        else
+        {
             set_sprite_prop(0, S_FLIPX);
             set_sprite_prop(1, S_FLIPX);
             // set_sprite_tile(0, 2);
             // set_sprite_tile(1, 0);
-            set_sprite_tile(0, 10 + (((time>>2)&2)<<1) + flying_add);
-            set_sprite_tile(1, 8 + (((time>>2)&2)<<1) + flying_add);
-        }         
-    }
-        if (peck_frames) {
-            peck_frames--;
-            if (player_vx_dir >= 0)
-            {
-                set_sprite_prop(0, 0);
-                set_sprite_prop(1, 0);
-                set_sprite_tile(0, 24);
-                set_sprite_tile(1, 26);
-            }
-            else
-            {
-                set_sprite_prop(0, S_FLIPX);
-                set_sprite_prop(1, S_FLIPX);
-                set_sprite_tile(0, 26);
-                set_sprite_tile(1, 24);
-            }
+            set_sprite_tile(0, 10 + (((time >> 2) & 2) << 1) + flying_add);
+            set_sprite_tile(1, 8 + (((time >> 2) & 2) << 1) + flying_add);
         }
+    }
+    if (peck_frames)
+    {
+        peck_frames--;
+        if (pc.draw_direction >= 0)
+        {
+            set_sprite_prop(0, 0);
+            set_sprite_prop(1, 0);
+            set_sprite_tile(0, 24);
+            set_sprite_tile(1, 26);
+        }
+        else
+        {
+            set_sprite_prop(0, S_FLIPX);
+            set_sprite_prop(1, S_FLIPX);
+            set_sprite_tile(0, 26);
+            set_sprite_tile(1, 24);
+        }
+    }
 }
 
 void move_camera()
