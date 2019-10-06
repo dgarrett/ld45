@@ -6,3 +6,6 @@
 - [ ] Powerup/body part sprites
 - [ ] Door to new level
 - [x] PC body part status
+- [ ] Start screen
+- [ ] background music
+- [ ] Seeds to pick up?

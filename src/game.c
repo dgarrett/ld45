@@ -320,6 +320,7 @@ void game_loop()
                 player_vy.w = JUMP_VELOCITY;
                 player_vy_dir = -1;
                 hold_jump = TRUE;
+                play_fx_dot_hop();
             }                     
             if (((i & J_RIGHT) || (i & J_LEFT)) && pc.body == DOT) {
                 if (i & J_LEFT) {
