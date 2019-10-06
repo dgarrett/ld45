@@ -1,6 +1,8 @@
 #include "game.h"
 #include "assets.h"
 
+#include "music.c"
+
 void game_loop();
 void win();
 void reset_level();
@@ -34,6 +36,18 @@ int debug_num = 0;
 #define MAX_FALL_SPEED 0x4800
 
 void play_fx_dot_hop() {
+    NR52_REG = 0x80;
+    NR51_REG = 0x11;
+    NR50_REG = 0x77;
+
+    NR10_REG = 0x15;
+    NR11_REG = 0x96;
+    NR12_REG = 0x73;
+    NR13_REG = 0xBB;
+    NR14_REG = 0x85;
+}
+
+void play_fx_peck() {
     NR52_REG = 0x80;
     NR51_REG = 0x11;
     NR50_REG = 0x77;
@@ -155,7 +169,16 @@ int main()
     BGP_REG = OBP0_REG = 0xE4U;
     OBP1_REG = 0xD2U;
 
-    set_interrupts(VBL_IFLAG | LCD_IFLAG);
+    disable_interrupts();
+    add_TIM(timerInterrupt);
+    enable_interrupts();
+
+    /* Set TMA to divide clock by 0x100 */
+    TMA_REG = 0x00U;
+    /* Set clock to 4096 Hertz */
+    TAC_REG = 0x04U;
+
+    set_interrupts(VBL_IFLAG | LCD_IFLAG | TIM_IFLAG);
     STAT_REG = 0x45;
 
     WX_REG = MAXWNDPOSX;
@@ -342,6 +365,9 @@ void game_loop()
 
         // TODO body
         if (i & J_B && pc.body >= TORSO) {
+            if (peck_frames == 0) {
+                play_fx_peck();
+            }
             peck_frames = 5;
         }
 
@@ -405,3 +431,4 @@ void reset_level() {
 
     running = TRUE;
 }
+
