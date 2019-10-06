@@ -15,6 +15,7 @@ BYTE player_vx_dir;
 BYTE player_vy_dir;
 UBYTE running;
 UBYTE hold_jump;
+int peck_frames = 0;
 
 struct player_character pc = {DOT, dot_sprites};
 int debug_num = 0;
@@ -78,6 +79,23 @@ void draw_player()
             set_sprite_tile(1, 8 + (((time>>2)&2)<<1) + flying_add);
         }         
     }
+        if (peck_frames) {
+            peck_frames--;
+            if (player_vx_dir >= 0)
+            {
+                set_sprite_prop(0, 0);
+                set_sprite_prop(1, 0);
+                set_sprite_tile(0, 24);
+                set_sprite_tile(1, 26);
+            }
+            else
+            {
+                set_sprite_prop(0, S_FLIPX);
+                set_sprite_prop(1, S_FLIPX);
+                set_sprite_tile(0, 26);
+                set_sprite_tile(1, 24);
+            }
+        }
 }
 
 void move_camera()
@@ -162,11 +180,11 @@ void game_loop()
 
         // Velocity
 
-        if(i & J_LEFT) {
+        if(i & J_LEFT && !peck_frames) {
             // if(player_vx.w <= 0) {
             if(player_vx_dir <= 0) {
                 player_vx_dir = -1;
-                if(i & J_B) {
+                if(i & J_B && pc.body < HEAD) {
                     player_vx.w += RUN_ACCELERATION; 
                 } else {
                     player_vx.w += WALK_ACCELERATION; 
@@ -179,11 +197,11 @@ void game_loop()
                     player_vx_dir = 0;
                 }                
             }
-        } else if(i & J_RIGHT) {
+        } else if(i & J_RIGHT && !peck_frames) {
             // if(player_vx.w >= 0) {
             if(player_vx_dir >= 0) {
                 player_vx_dir = 1;
-                if(i & J_B) {
+                if(i & J_B && pc.body < HEAD) {
                     player_vx.w += RUN_ACCELERATION; 
                 } else {
                     player_vx.w += WALK_ACCELERATION; 
@@ -217,6 +235,7 @@ void game_loop()
             }
         }
 
+        // TODO fix for BODY and pecking
         if(!(i & J_B) && player_vx.w > MAX_WALK_SPEED) {
             player_vx.w = MAX_WALK_SPEED;
         } else if((i & J_B) && player_vx.w > MAX_RUN_SPEED) {
@@ -290,10 +309,17 @@ void game_loop()
             hold_jump = FALSE;
         }  
 
+        // TODO body
+        if (i & J_B && pc.body >= TORSO) {
+            peck_frames = 5;
+        }
+
         // Reposition Player
         draw_player();
         move_camera();
         move_player();
+
+
 
         // Check for end state
         if(col_tile == 0xa && below_tile >= 0xb && player_vy.w == 0 ) {

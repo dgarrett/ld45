@@ -5,4 +5,4 @@
 - [ ] Enemy sprites
 - [ ] Powerup/body part sprites
 - [ ] Door to new level
-- [ ] PC body part status
+- [x] PC body part status
