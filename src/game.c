@@ -15,7 +15,7 @@ BYTE player_vx_dir;
 BYTE player_vy_dir;
 UBYTE running;
 UBYTE hold_jump;
-int peck_frames = 0;
+UBYTE peck_frames = 0;
 
 struct player_character pc = {DOT, dot_sprites, 1};
 int debug_num = 0;
@@ -62,14 +62,14 @@ void draw_player()
         {
             set_sprite_prop(0, 0);
             set_sprite_prop(1, 0);
-            set_sprite_tile(0, 0);
-            set_sprite_tile(1, 2);
+            set_sprite_tile(0, 0 + (((time >> 2) & 2) << 1));
+            set_sprite_tile(1, 2 + (((time >> 2) & 2) << 1));
         } else if (pc.draw_direction < 0)
         {
             set_sprite_prop(0, S_FLIPX);
             set_sprite_prop(1, S_FLIPX);
-            set_sprite_tile(0, 2);
-            set_sprite_tile(1, 0);
+            set_sprite_tile(0, 2 + (((time >> 2) & 2) << 1));
+            set_sprite_tile(1, 0 + (((time >> 2) & 2) << 1));
         }
     }
     else
@@ -104,7 +104,7 @@ void draw_player()
             set_sprite_tile(1, 8 + (((time >> 2) & 2) << 1) + flying_add);
         }
     }
-    if (peck_frames)
+    if (peck_frames > 0)
     {
         peck_frames--;
         if (pc.draw_direction >= 0)
@@ -146,6 +146,9 @@ void move_player()
 
 int main()
 {
+    // pc.draw_direction = 1;
+    peck_frames = 0;
+
     LCDC_REG = 0x67; // ???
 
     /* Set palettes */
@@ -186,6 +189,7 @@ int main()
 
 void game_loop()
 {
+    // LOG("PECK: %u\n", peck_frames);
     UBYTE i, t_x, t_y, below_tile, col_tile;
   
     #ifdef __EMSCRIPTEN__    
@@ -206,7 +210,7 @@ void game_loop()
 
         // Velocity
 
-        if(i & J_LEFT && !peck_frames) {
+        if(i & J_LEFT && peck_frames <= 0) {
             // if(player_vx.w <= 0) {
             if(player_vx_dir <= 0) {
                 player_vx_dir = -1;
@@ -223,7 +227,7 @@ void game_loop()
                     player_vx_dir = 0;
                 }                
             }
-        } else if(i & J_RIGHT && !peck_frames) {
+        } else if(i & J_RIGHT && peck_frames <= 0) {
             // if(player_vx.w >= 0) {
             if(player_vx_dir >= 0) {
                 player_vx_dir = 1;
