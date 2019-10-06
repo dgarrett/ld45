@@ -251,10 +251,12 @@ void game_loop()
         below_tile = platformer_tiles[(32 * t_y) + t_x];
         col_tile = platformer_tiles[(32 * (t_y-1)) + t_x];
 
-        if(below_tile >= 0xb && player_vy_dir >= 0) {
+        if((below_tile >= 0xb || pc.body >= TORSO) && player_vy_dir >= 0 ) {
             // LOG("HIT TILE %d\n", below_tile);
-            player_y.b.h = t_y<<3;
-            player_vy.w = 0; 
+            if (below_tile >= 0xb) {
+                player_y.b.h = t_y << 3;
+                player_vy.w = 0;
+            }
             if(!hold_jump && (i & J_A) && pc.body >= LEGS) {
                 player_vy.w = JUMP_VELOCITY;
                 player_vy_dir = -1;
@@ -307,8 +309,16 @@ void win() {
     SCY_REG = 0;
     DISPLAY_ON;    
 
-    pc.body = LEGS;
-    pc.sprite_sheet = dot_legs;
+    switch (pc.body) {
+    case DOT:
+        pc.body = LEGS;
+        pc.sprite_sheet = dot_legs;
+        break;
+    case LEGS:
+        pc.body = TORSO;
+        pc.sprite_sheet = dot_legs;
+        break;
+    }
 }
 
 void reset_level() {
