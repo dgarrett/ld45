@@ -7,8 +7,9 @@ ASSET_FILE=../include/assets.h
 ggbgfx tileset win.png -o win_tileset.png
 
 # Build sprites
-ggbgfx sprite player_sprites.png > $ASSET_FILE
+ggbgfx sprite dot_sprites.png > $ASSET_FILE
 ggbgfx sprite dot_legs.png >> $ASSET_FILE
+ggbgfx sprite borb_full_grey.png >> $ASSET_FILE
 
 # Build tiledata
 ggbgfx tiledata platformer_tileset.png >> $ASSET_FILE
