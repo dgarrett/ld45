@@ -6,6 +6,7 @@
 void game_loop();
 void win();
 void reset_level();
+void main_menu();
 
 UBYTE prev_joy;
 UBYTE time;
@@ -19,7 +20,7 @@ UBYTE running;
 UBYTE hold_jump;
 UBYTE peck_frames = 0;
 
-const unsigned char *platformer_tiles = level1;
+unsigned char *platformer_tiles = level1;
 
 struct player_character pc = {DOT, dot_sprites, 1};
 int debug_num = 0;
@@ -33,7 +34,7 @@ int debug_num = 0;
 #define MAX_RUN_SPEED 0x2900
 
 #define JUMP_VELOCITY 0x4000
-#define JUMP_HOLD 0x200
+#define JUMP_HOLD 0x400
 #define GRAVITY 0x700
 #define MAX_FALL_SPEED 0x4800
 
@@ -199,10 +200,11 @@ int main()
     player_x.b.h = 48;
     player_y.b.h = 224;
 
-    running = TRUE;
+    // running = TRUE;
+    main_menu();
 
-    draw_player();
-    move_player();
+    // draw_player();
+    // move_player();
     
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(game_loop, 60, 1);
@@ -410,12 +412,25 @@ void win() {
     case DOT:
         pc.body = LEGS;
         pc.sprite_sheet = dot_legs;
+        platformer_tiles = level2;
         break;
     case LEGS:
         pc.body = TORSO;
         pc.sprite_sheet = borb_full_grey;
+        platformer_tiles = level3;
         break;
     }
+}
+
+void main_menu() {
+    DISPLAY_OFF;
+    HIDE_SPRITES;
+    running = FALSE;
+    set_bkg_data(0x00, 108, win_tileset);
+    set_bkg_tiles(0, 0, 20, 18, win_tiles);
+    SCX_REG = 0;
+    SCY_REG = 0;
+    DISPLAY_ON;    
 }
 
 void reset_level() {
