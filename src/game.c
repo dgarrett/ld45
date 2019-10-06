@@ -19,6 +19,8 @@ UBYTE running;
 UBYTE hold_jump;
 UBYTE peck_frames = 0;
 
+const unsigned char *platformer_tiles = level1;
+
 struct player_character pc = {DOT, dot_sprites, 1};
 int debug_num = 0;
 

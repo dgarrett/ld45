@@ -16,5 +16,5 @@ ggbgfx tiledata platformer_tileset.png >> $ASSET_FILE
 ggbgfx tiledata win_tileset.png >> $ASSET_FILE
 
 # Build tilemaps
-ggbgfx tilemap -n platformer_tiles platformer.png platformer_tileset.png >> $ASSET_FILE
+ggbgfx tilemap -n level1 level1.png platformer_tileset.png >> $ASSET_FILE
 ggbgfx tilemap -n win_tiles win.png win_tileset.png >> $ASSET_FILE
