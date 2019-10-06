@@ -48,15 +48,17 @@ void play_fx_dot_hop() {
 }
 
 void play_fx_peck() {
-    NR52_REG = 0x80;
-    NR51_REG = 0x11;
-    NR50_REG = 0x77;
+    NR21_REG = 0x80U;
+    NR22_REG = 0x73U;
+    NR23_REG = 0x9EU;
+    NR24_REG = 0xC7U;
+    NR51_REG |= 0x22;
 
-    NR10_REG = 0x15;
-    NR11_REG = 0x96;
-    NR12_REG = 0x73;
-    NR13_REG = 0xBB;
-    NR14_REG = 0x85;
+    NR21_REG = 0xAEU;
+    NR22_REG = 0x68U;
+    NR23_REG = 0xDBU;
+    NR24_REG = 0xC6U;
+    NR51_REG |= 0x22;
 }
 
 void draw_player()
