@@ -16,7 +16,7 @@ BYTE player_vy_dir;
 UBYTE running;
 UBYTE hold_jump;
 
-struct player_character pc = {DOT};
+struct player_character pc = {DOT, player_sprites};
 int debug_num = 0;
 
 #define MIN_WALK_VEL 0x130
@@ -107,7 +107,7 @@ int main()
     // Initialize the background
     set_bkg_data(0x00, 108, platformer_tileset);
     set_bkg_tiles(0, 0, 32, 32, platformer_tiles);
-    set_sprite_data(0x00, 0x80, player_sprites);
+    set_sprite_data(0x00, 0x80, pc.sprite_sheet);
 
     DISPLAY_ON;
     SHOW_SPRITES;
@@ -306,6 +306,9 @@ void win() {
     SCX_REG = 0;
     SCY_REG = 0;
     DISPLAY_ON;    
+
+    pc.body = LEGS;
+    pc.sprite_sheet = dot_legs;
 }
 
 void reset_level() {
@@ -315,7 +318,7 @@ void reset_level() {
     // Initialize the background
     set_bkg_data(0x00, 108, platformer_tileset);
     set_bkg_tiles(0, 0, 32, 32, platformer_tiles);
-    set_sprite_data(0x00, 0x80, player_sprites);
+    set_sprite_data(0x00, 0x80, pc.sprite_sheet);
 
     DISPLAY_ON;
     SHOW_SPRITES;
