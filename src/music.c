@@ -44,46 +44,136 @@ typedef struct {
 	UBYTE env;
 } note;
 
+enum DurationNote
+{
+    LONG = 0x84U,
+    SHORT = 0x81U,
+    LONG_LONG = 135
+};
+
 //define a song as a series of note structs
 //This song is a 16 note loop on channel 1
 //each channel should have its own array, so
 //that multiple notes can be played simultaneously
-note song_ch1[17] = { //notes to be played on channel 1
-	{MELODY, A5, 0x81U},
-	{MELODY, C5, 0xA2U},
-	{MELODY, E5, 0x81U},
-	{MELODY, Gd5, 0x84U},
-	{HARMONY, C4, 0x81U},
-	{HARMONY, E7, 0x87U},
-	{MELODY, C6, 0x81U},
-	{NONE, SILENCE, 0x00U},
-	{NONE, SILENCE, 0x00U},
-	{MELODY, E4, 0x81U},
-	{MELODY, F4, 0x84U},
-	{HARMONY, G5, 0x81U},
-	{NONE, SILENCE, 0x00U},
-	{MELODY, F5, 0x84U},
-	{HARMONY, B4, 0x81U},
-	{NONE, SILENCE, 0x00U},
-	{NONE, SILENCE, 0x00U}
+note song_ch1[] = { //notes to be played on channel 1
+{NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, C5, LONG},
+    {MELODY, C5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG},
+    {MELODY, C5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, B4, LONG},
+    {MELODY, B4, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, C5, LONG},
+    {MELODY, B4, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A5, LONG},
+    {MELODY, G5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, F5, LONG},
+    {MELODY, F5, LONG},
+    {MELODY, E5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG_LONG},
+    {MELODY, D5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG},
+    {MELODY, C5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, G4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, E5, LONG},
+    {MELODY, C5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, G4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, C5, LONG},
+    {MELODY, B4, LONG_LONG},
+    {NONE, SILENCE, LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, G4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A4, LONG},
+    {MELODY, G4, LONG},
+    {MELODY, A5, LONG},
+    {MELODY, G5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, F5, LONG},
+    {MELODY, F5, LONG},
+    {MELODY, E5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, E5, LONG_LONG},
+    {MELODY, D5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
+    {MELODY, D5, LONG},
+    {MELODY, C5, LONG_LONG},
+    {NONE, SILENCE, LONG_LONG},
 };
 
 //function to set sound registers based on notes chosen
 void setNote(note *n){
 	switch((*n).i){
 		case MELODY:
-			NR10_REG = 0x00U; //pitch sweep
-			NR11_REG = 0x84U; //wave duty
-			NR12_REG = (*n).env; //envelope
-			NR13_REG = (UBYTE)frequencies[(*n).p]; //low bits of frequency
-			NR14_REG = 0x80U | ((UWORD)frequencies[(*n).p]>>8); //high bits of frequency (and sound reset)
+			// NR10_REG = 0x00U; //pitch sweep
+			NR21_REG = 0x84U; //wave duty
+			NR22_REG = (*n).env; //envelope
+			NR23_REG = (UBYTE)frequencies[(*n).p]; //low bits of frequency
+			NR24_REG = 0x80U | ((UWORD)frequencies[(*n).p]>>8); //high bits of frequency (and sound reset)
 		break;
 		case HARMONY:
-			NR10_REG = 0x01U;
-			NR11_REG = 0x00U; //wave duty for harmony is different
-			NR12_REG = (*n).env;
-			NR13_REG = (UBYTE)frequencies[(*n).p];
-			NR14_REG = 0x80U | ((UWORD)frequencies[(*n).p]>>8);
+			// NR10_REG = 0x01U;
+			NR21_REG = 0x00U; //wave duty for harmony is different
+			NR22_REG = (*n).env;
+			NR23_REG = (UBYTE)frequencies[(*n).p];
+			NR24_REG = 0x80U | ((UWORD)frequencies[(*n).p]>>8);
 		break;
 		case SNARE:
 		break;
@@ -96,7 +186,7 @@ void setNote(note *n){
 //the current beat in Channel 1
 void playChannel1(){
 	setNote(&song_ch1[currentBeat]);
-	NR51_REG |= 0x11U; //enable sound on channel 1
+	NR51_REG |= 0xFFU; //enable sound on all channels
     NR52_REG = 0x80;
     NR50_REG = 0x77;
 }

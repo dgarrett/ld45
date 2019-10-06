@@ -37,7 +37,7 @@ int debug_num = 0;
 
 void play_fx_dot_hop() {
     NR52_REG = 0x80;
-    NR51_REG = 0x11;
+    NR51_REG |= 0xFF;
     NR50_REG = 0x77;
 
     NR10_REG = 0x15;
@@ -48,17 +48,17 @@ void play_fx_dot_hop() {
 }
 
 void play_fx_peck() {
-    NR21_REG = 0x80U;
-    NR22_REG = 0x73U;
-    NR23_REG = 0x9EU;
-    NR24_REG = 0xC7U;
-    NR51_REG |= 0x22;
+    NR11_REG = 0x80U;
+    NR12_REG = 0x73U;
+    NR13_REG = 0x9EU;
+    NR14_REG = 0xC7U;
+    NR11_REG |= 0x11;
 
-    NR21_REG = 0xAEU;
-    NR22_REG = 0x68U;
-    NR23_REG = 0xDBU;
-    NR24_REG = 0xC6U;
-    NR51_REG |= 0x22;
+    NR11_REG = 0xAEU;
+    NR12_REG = 0x68U;
+    NR13_REG = 0xeBU;
+    NR14_REG = 0xC6U;
+    NR51_REG |= 0x11;
 }
 
 void draw_player()
