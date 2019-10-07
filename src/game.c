@@ -5,7 +5,7 @@
 
 void game_loop();
 void win();
-void reset_level();
+void reset_level(int hax);
 void main_menu();
 
 UBYTE prev_joy;
@@ -174,9 +174,11 @@ int main()
     BGP_REG = OBP0_REG = 0xE4U;
     OBP1_REG = 0xD2U;
 
+#ifndef __EMSCRIPTEN__
     disable_interrupts();
     add_TIM(timerInterrupt);
     enable_interrupts();
+#endif
 
     /* Set TMA to divide clock by 0x100 */
     TMA_REG = 0x00U;
@@ -391,7 +393,7 @@ void game_loop()
         }
 
     } else if (i & J_START) {
-        reset_level();
+        reset_level(i & J_SELECT);
     }
 
     prev_joy = i;
@@ -402,11 +404,11 @@ void win() {
     DISPLAY_OFF;
     HIDE_SPRITES;
     running = FALSE;
-    set_bkg_data(0x00, 108, win_tileset);
+    set_bkg_data(0x00, 255, win_tileset);
     set_bkg_tiles(0, 0, 20, 18, win_tiles);
     SCX_REG = 0;
     SCY_REG = 0;
-    DISPLAY_ON;    
+    DISPLAY_ON;
 
     switch (pc.body) {
     case DOT:
@@ -426,14 +428,20 @@ void main_menu() {
     DISPLAY_OFF;
     HIDE_SPRITES;
     running = FALSE;
-    set_bkg_data(0x00, 108, win_tileset);
-    set_bkg_tiles(0, 0, 20, 18, win_tiles);
+    set_bkg_data(0x00, 255, game_title_tileset);
+    set_bkg_tiles(0, 0, 20, 18, game_title_tiles);
     SCX_REG = 0;
     SCY_REG = 0;
-    DISPLAY_ON;    
+    DISPLAY_ON;
 }
 
-void reset_level() {
+void reset_level(int hax) {
+    if (hax) {
+        pc.body = TORSO;
+        pc.sprite_sheet = borb_full_grey;
+        // platformer_tiles = level3;
+    }
+
     WX_REG = MAXWNDPOSX;
     WY_REG = MAXWNDPOSY;
 
